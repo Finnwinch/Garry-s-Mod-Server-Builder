@@ -1,0 +1,55 @@
+@echo off
+setlocal enabledelayedexpansion
+if not exist "GmodServer" (
+    mkdir GmodServer
+)
+if not exist "SteamCMD" (
+    mkdir SteamCMD
+)
+set Dir=%CD%
+cd SteamCMD
+powershell -Command "Invoke-WebRequest -Uri 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip' -OutFile 'steamcmd.zip'"
+powershell -Command "Expand-Archive -Path 'steamcmd.zip' -DestinationPath . -Force"
+del "steamcmd.zip"
+steamcmd +force_install_dir %Dir%\GmodServer +login anonymous +app_update 232330 validate +app_update 4020 validate +quit
+(
+    echo @echo off
+    echo cd "%Dir%\GmodServer"
+    echo start /min srcds.exe -console +gamemode sandbox +map gm_construct +sv_lan 1 +maxplayers 69 +host_workshop_collection 0 -tickrate 66 +hostname "The super server" +port 27020 +clientport 27010
+) > %DIR%\LAUNCH.bat
+cd %Dir%\GmodServer\garrysmod\cfg
+del mount.cfg
+(
+echo "mountcfg"
+echo {
+echo     "cstrike"	"%Dir%\GmodServer\cstrike"
+echo }
+) > mount.cfg
+cd %Dir%\GmodServer\garrysmod\gamemodes
+if not exist "darkrp" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://github.com/FPtje/DarkRP/archive/refs/heads/master.zip' -OutFile 'DarkRP-master.zip'"
+    powershell -Command "Expand-Archive -Path 'DarkRP-master.zip' -DestinationPath . -Force"
+    del "DarkRP-master.zip"
+    rename DarkRP-master darkrp
+)
+cd %Dir%\GmodServer\garrysmod\addons
+if not exist "darkrpmodification" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://github.com/FPtje/darkrpmodification/archive/refs/heads/master.zip' -OutFile 'darkrpmodification-master.zip'"
+    powershell -Command "Expand-Archive -Path 'darkrpmodification-master.zip' -DestinationPath . -Force"
+    del "darkrpmodification-master.zip"
+    rename darkrpmodification-master darkrpmodification
+)
+if not exist "ulib" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://github.com/TeamUlysses/ulib/archive/refs/heads/master.zip' -OutFile 'ulib-master.zip'"
+    powershell -Command "Expand-Archive -Path 'ulib-master.zip' -DestinationPath . -Force"
+    del "ulib-master.zip"
+    rename ulib-master ulib
+)
+if not exist "ulx" (
+    powershell -Command "Invoke-WebRequest -Uri 'https://github.com/TeamUlysses/ulx/archive/refs/heads/master.zip' -OutFile 'ulx-master.zip'"
+    powershell -Command "Expand-Archive -Path 'ulx-master.zip' -DestinationPath . -Force"
+    del "ulx-master.zip"
+    rename ulx-master ulx
+)
+echo "Installation terminer!"
+pause
