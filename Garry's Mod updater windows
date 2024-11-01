@@ -32,6 +32,7 @@ if not exist "darkrp" (
     del "DarkRP-master.zip"
     rename DarkRP-master darkrp
 )
+mkdir "%Dir%\GmodServer\garrysmod\addons"
 cd %Dir%\GmodServer\garrysmod\addons
 if not exist "darkrpmodification" (
     powershell -Command "Invoke-WebRequest -Uri 'https://github.com/FPtje/darkrpmodification/archive/refs/heads/master.zip' -OutFile 'darkrpmodification-master.zip'"
